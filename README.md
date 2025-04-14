@@ -37,7 +37,7 @@ docker build -t egresos-hospitalarios .
 
 2. Ejecutar el contenedor:
 ```bash
-docker-compose up
+docker-compose up --build
 ```
 
 ## Uso de la API
