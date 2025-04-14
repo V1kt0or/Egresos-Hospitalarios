@@ -44,13 +44,20 @@ docker-compose up
 
 La API está disponible en `http://localhost:8191` y proporciona los siguientes endpoints:
 
-### Crear un nuevo registro
+### Crear un nuevo registro de egreso hospitalario
 ```bash
 curl -X POST http://localhost:8191/crear \
   -H "Content-Type: application/json" \
   -d '{
-    "campo1": "valor1",
-    "campo2": "valor2"
+    "uuid": "123e4567-e89b-12d3-a456-426614174000",
+    "historia": "H123456",
+    "sexo": "M",
+    "edad": 45,
+    "fecha_ingreso": "2024-01-15T10:30:00Z",
+    "fecha_egreso": "2024-01-20T14:45:00Z",
+    "ubigeo_lugar_residencia": 150101,
+    "lugar_residencia": "Lima",
+    "fecha_corte": "2024-01-20T00:00:00Z"
   }'
 ```
 
