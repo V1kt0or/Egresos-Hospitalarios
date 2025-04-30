@@ -3,6 +3,7 @@ package handlers
 import (
 	"MS1_Egresos_Hospitalarios/db"
 	"MS1_Egresos_Hospitalarios/models"
+	"bytes"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -26,6 +27,35 @@ func CrearObjeto(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error al insertar: %v", err), http.StatusInternalServerError)
 		return
+	}
+	notificacion := struct {
+		Subject string `json:"subject"`
+		Message string `json:"message"`
+	}{
+		Subject: "egreso hospitalario",
+		Message: "Se INGRESO UN EGRESO A LA DB",
+	}
+
+	notificacionJSON, err := json.Marshal(notificacion)
+	if err != nil {
+		// Solo logueamos el error pero continuamos con la respuesta principal
+		fmt.Printf("Error al crear JSON de notificación: %v\n", err)
+	} else {
+		// Crear una solicitud POST a la API
+		resp, err := http.Post(
+			"http://localhost:9100/api",
+			"application/json",
+			bytes.NewBuffer(notificacionJSON),
+		)
+
+		if err != nil {
+			// Solo logueamos el error pero continuamos con la respuesta principal
+			fmt.Printf("Error al enviar notificación: %v\n", err)
+		} else {
+			// Cerramos el cuerpo de la respuesta
+			defer resp.Body.Close()
+			fmt.Println("Notificación enviada correctamente")
+		}
 	}
 
 	w.WriteHeader(http.StatusCreated)
